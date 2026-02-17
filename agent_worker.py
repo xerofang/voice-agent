@@ -149,19 +149,22 @@ async def agent_entrypoint(ctx: JobContext):
             api_key=os.getenv("OPENAI_API_KEY")
         )
     
-    # Create agent session
+    # Create the agent
+    agent = LeadNurtureAgent(config)
+
+    # Create agent session with the agent
     session = AgentSession(
+        agent=agent,
         stt=stt,
         tts=tts,
         llm=llm,
         turn_detection="stt",
         min_endpointing_delay=0.07
     )
-    
-    # Start the agent
-    agent = LeadNurtureAgent(config)
-    session.start(ctx.room, agent)
-    
+
+    # Start the session
+    await session.start(ctx.room)
+
     logger.info(f"Agent started: {config.get('name')}, Language: {language}, Voice: {config.get('voice')}")
 
 # ==========================================
