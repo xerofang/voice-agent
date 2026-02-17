@@ -123,9 +123,15 @@ async def agent_entrypoint(ctx: JobContext):
     
     # Configure Sarvam AI for TTS
     # bulbul:v2 compatible speakers: anushka, manisha, vidya, arya, abhilash, karun, hitesh
+    valid_speakers = ["anushka", "manisha", "vidya", "arya", "abhilash", "karun", "hitesh"]
+    speaker = config.get("voice", "arya")
+    if speaker not in valid_speakers:
+        logger.warning(f"Invalid speaker '{speaker}', falling back to 'arya'")
+        speaker = "arya"
+
     tts = sarvam.TTS(
         model="bulbul:v2",
-        speaker=config.get("voice", "arya"),
+        speaker=speaker,
         target_language_code=language if language != "unknown" else "hi-IN",
     )
     
