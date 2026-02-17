@@ -152,9 +152,8 @@ async def agent_entrypoint(ctx: JobContext):
     # Create the agent
     agent = LeadNurtureAgent(config)
 
-    # Create agent session with the agent
+    # Create agent session
     session = AgentSession(
-        agent=agent,
         stt=stt,
         tts=tts,
         llm=llm,
@@ -162,8 +161,8 @@ async def agent_entrypoint(ctx: JobContext):
         min_endpointing_delay=0.07
     )
 
-    # Start the session
-    await session.start(ctx.room)
+    # Start the session with the agent
+    await session.start(ctx.room, agent=agent)
 
     logger.info(f"Agent started: {config.get('name')}, Language: {language}, Voice: {config.get('voice')}")
 
